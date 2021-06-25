@@ -1,19 +1,34 @@
 package com.syswarp.delta.data.entity;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import com.syswarp.delta.data.AbstractEntity;
+import com.vaadin.flow.data.validator.DateRangeValidator;
+
 import java.time.LocalDate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 
 @Entity
-public class Contableejercicios extends AbstractEntity {
+//public class Contableejercicios extends AbstractEntity {
+public class Contableejercicios  {
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    long id;
+
+    @Column(name="ejercicio", length=100, nullable=false, unique=true)
+    @NotBlank(message = "El nombre del ejercicio no puede quedar vacio")
     private String ejercicio;
+
+    //@Column(name="fechadesde", nullable=false, unique=true)
     private LocalDate fechadesde;
+
+    //@Column(name="fechadesde", nullable=false, unique=true)
     private LocalDate fechahasta;
+
     private boolean activo;
     private String usuarioalt;
     private String usuarioact;
@@ -67,6 +82,13 @@ public class Contableejercicios extends AbstractEntity {
     }
     public void setFechaact(LocalDateTime fechaact) {
         this.fechaact = fechaact;
+    }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
 }

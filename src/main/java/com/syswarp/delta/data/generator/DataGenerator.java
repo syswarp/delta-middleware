@@ -15,7 +15,9 @@ import com.syswarp.delta.data.entity.Contabletipificacion;
 import com.syswarp.delta.data.service.ContableinfimovRepository;
 import com.syswarp.delta.data.entity.Contableinfimov;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +46,56 @@ public class DataGenerator {
 
             logger.info("Generating demo data");
 
-            logger.info("... generating 100 Contableejercicios entities...");
+            logger.info("... generarando ejercicios contables...");
+
+
+            Contableejercicios ce = new Contableejercicios();
+            //2019
+            ce.setId(1);
+            ce.setEjercicio("2019- Ejercicio Contable Enero 2019 a Diciembre 2019");
+            ce.setActivo(false);
+            ce.setUsuarioalt("syswarp");
+            ce.setUsuarioact("syswarp");
+            LocalDateTime hoy = LocalDateTime.now();
+            ce.setFechaalt(hoy);
+            ce.setFechaact(hoy);
+            LocalDate desde = LocalDate.of(2019, Month.JANUARY, 1);
+            LocalDate hasta = LocalDate.of(2019, Month.DECEMBER, 31);
+            ce.setFechadesde(desde);
+            ce.setFechahasta(hasta);
+            contableejerciciosRepository.save(ce);
+
+            //2020
+            ce.setId(2);
+            ce.setEjercicio("2020- Ejercicio Contable Enero 2020 a Diciembre 2020");
+            ce.setActivo(false);
+            ce.setUsuarioalt("syswarp");
+            ce.setUsuarioact("syswarp");
+             hoy = LocalDateTime.now();
+            ce.setFechaalt(hoy);
+            ce.setFechaact(hoy);
+             desde = LocalDate.of(2020, Month.JANUARY, 1);
+             hasta = LocalDate.of(2020, Month.DECEMBER, 31);
+            ce.setFechadesde(desde);
+            ce.setFechahasta(hasta);
+            contableejerciciosRepository.save(ce);
+
+            //2021
+            ce.setId(3);
+            ce.setEjercicio("2021- Ejercicio Contable Enero 2021 a Diciembre 2021");
+            ce.setActivo(true);
+            ce.setUsuarioalt("syswarp");
+            ce.setUsuarioact("syswarp");
+            hoy = LocalDateTime.now();
+            ce.setFechaalt(hoy);
+            ce.setFechaact(hoy);
+            desde = LocalDate.of(2021, Month.JANUARY, 1);
+            hasta = LocalDate.of(2021, Month.DECEMBER, 31);
+            ce.setFechadesde(desde);
+            ce.setFechahasta(hasta);
+            contableejerciciosRepository.save(ce);
+
+            /*
             ExampleDataGenerator<Contableejercicios> contableejerciciosRepositoryGenerator = new ExampleDataGenerator<>(
                     Contableejercicios.class, LocalDateTime.of(2021, 6, 24, 0, 0, 0));
             contableejerciciosRepositoryGenerator.setData(Contableejercicios::setId, DataType.ID);
@@ -60,7 +111,7 @@ public class DataGenerator {
             contableejerciciosRepositoryGenerator.setData(Contableejercicios::setFechaact,
                     DataType.DATETIME_LAST_10_YEARS);
             contableejerciciosRepository.saveAll(contableejerciciosRepositoryGenerator.create(100, seed));
-
+            */
             logger.info("... generating 100 Contablecencosto entities...");
             ExampleDataGenerator<Contablecencosto> contablecencostoRepositoryGenerator = new ExampleDataGenerator<>(
                     Contablecencosto.class, LocalDateTime.of(2021, 6, 24, 0, 0, 0));

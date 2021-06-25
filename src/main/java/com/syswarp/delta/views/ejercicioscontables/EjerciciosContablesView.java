@@ -46,7 +46,7 @@ public class EjerciciosContablesView extends Div implements BeforeEnterObserver 
 
     private Grid<Contableejercicios> grid = new Grid<>(Contableejercicios.class, false);
 
-    private TextField id;
+    //private TextField id;
     private TextField ejercicio;
     private DatePicker fechadesde;
     private DatePicker fechahasta;
@@ -79,18 +79,14 @@ public class EjerciciosContablesView extends Div implements BeforeEnterObserver 
 
         // Configure Grid
         grid.addColumn("id").setAutoWidth(true);
-        grid.addColumn("ejercicio").setAutoWidth(true);
-        grid.addColumn("fechadesde").setAutoWidth(true);
-        grid.addColumn("fechahasta").setAutoWidth(true);
+        grid.addColumn("ejercicio").setAutoWidth(true).setHeader("Ejercicio");
+        grid.addColumn("fechadesde").setAutoWidth(true).setHeader("F.Desde");
+        grid.addColumn("fechahasta").setAutoWidth(true).setHeader("F.Hasta");
         TemplateRenderer<Contableejercicios> activoRenderer = TemplateRenderer.<Contableejercicios>of(
                 "<iron-icon hidden='[[!item.activo]]' icon='vaadin:check' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-primary-text-color);'></iron-icon><iron-icon hidden='[[item.activo]]' icon='vaadin:minus' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-disabled-text-color);'></iron-icon>")
                 .withProperty("activo", Contableejercicios::isActivo);
         grid.addColumn(activoRenderer).setHeader("Activo").setAutoWidth(true);
 
-        grid.addColumn("usuarioalt").setAutoWidth(true);
-        grid.addColumn("usuarioact").setAutoWidth(true);
-        grid.addColumn("fechaalt").setAutoWidth(true);
-        grid.addColumn("fechaact").setAutoWidth(true);
         grid.setDataProvider(new CrudServiceDataProvider<>(contableejerciciosService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
@@ -110,7 +106,7 @@ public class EjerciciosContablesView extends Div implements BeforeEnterObserver 
         binder = new BeanValidationBinder<>(Contableejercicios.class);
 
         // Bind fields. This where you'd define e.g. validation rules
-        binder.forField(id).withConverter(new StringToIntegerConverter("Only numbers are allowed")).bind("id");
+        //binder.forField(id).withConverter(new StringToIntegerConverter("Only numbers are allowed")).bind("id");
 
         binder.bindInstanceFields(this);
 
@@ -140,10 +136,10 @@ public class EjerciciosContablesView extends Div implements BeforeEnterObserver 
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        Optional<Integer> contableejerciciosId = event.getRouteParameters().getInteger(CONTABLEEJERCICIOS_ID);
+        Optional<Long> contableejerciciosId = event.getRouteParameters().getLong(CONTABLEEJERCICIOS_ID);
         if (contableejerciciosId.isPresent()) {
             Optional<Contableejercicios> contableejerciciosFromBackend = contableejerciciosService
-                    .get(contableejerciciosId.get());
+                    .get(Math.toIntExact(contableejerciciosId.get()));
             if (contableejerciciosFromBackend.isPresent()) {
                 populateForm(contableejerciciosFromBackend.get());
             } else {
@@ -167,20 +163,13 @@ public class EjerciciosContablesView extends Div implements BeforeEnterObserver 
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        id = new TextField("Id");
+        //id = new TextField("Id");
         ejercicio = new TextField("Ejercicio");
-        fechadesde = new DatePicker("Fechadesde");
-        fechahasta = new DatePicker("Fechahasta");
+        fechadesde = new DatePicker("Fecha Desde");
+        fechahasta = new DatePicker("Fecha Hasta");
         activo = new Checkbox("Activo");
         activo.getStyle().set("padding-top", "var(--lumo-space-m)");
-        usuarioalt = new TextField("Usuarioalt");
-        usuarioact = new TextField("Usuarioact");
-        fechaalt = new DateTimePicker("Fechaalt");
-        fechaalt.setStep(Duration.ofSeconds(1));
-        fechaact = new DateTimePicker("Fechaact");
-        fechaact.setStep(Duration.ofSeconds(1));
-        Component[] fields = new Component[]{id, ejercicio, fechadesde, fechahasta, activo, usuarioalt, usuarioact,
-                fechaalt, fechaact};
+        Component[] fields = new Component[]{ ejercicio, fechadesde, fechahasta, activo};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");
