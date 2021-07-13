@@ -3,6 +3,8 @@ package com.syswarp.delta.data.service;
 import com.syswarp.delta.data.entity.Contableinfimov;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 

@@ -1,27 +1,28 @@
 package com.syswarp.delta.data.entity;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import com.syswarp.delta.data.AbstractEntity;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 
 @Entity
-public class Contablecencosto extends AbstractEntity {
+public class Contablecencosto  {
 
-    private Integer idcencosto;
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Integer id;
+
+    @Column(name="descripcion", length=50, nullable=false, unique=true)
+    @NotBlank(message = "La descripcion no puede quedar vacia")
     private String descripcion;
     private String usuarioalt;
     private String usuarioact;
     private LocalDateTime fechaalt;
     private LocalDateTime fechaact;
 
-    public Integer getIdcencosto() {
-        return idcencosto;
-    }
-    public void setIdcencosto(Integer idcencosto) {
-        this.idcencosto = idcencosto;
-    }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -51,6 +52,13 @@ public class Contablecencosto extends AbstractEntity {
     }
     public void setFechaact(LocalDateTime fechaact) {
         this.fechaact = fechaact;
+    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
 }

@@ -41,7 +41,6 @@ public class TiposdeCuentaView extends Div implements BeforeEnterObserver {
 
     private Grid<Contabletipificacion> grid = new Grid<>(Contabletipificacion.class, false);
 
-    private TextField idtipocuenta;
     private TextField tipo;
     private Checkbox mostrar;
     private Checkbox estotal;
@@ -68,8 +67,8 @@ public class TiposdeCuentaView extends Div implements BeforeEnterObserver {
         add(splitLayout);
 
         // Configure Grid
-        grid.addColumn("idtipocuenta").setAutoWidth(true);
-        grid.addColumn("tipo").setAutoWidth(true);
+        grid.addColumn("id").setAutoWidth(true);
+        grid.addColumn("tipo").setAutoWidth(true).setHeader("Tipo de Cuenta");
         TemplateRenderer<Contabletipificacion> mostrarRenderer = TemplateRenderer.<Contabletipificacion>of(
                 "<iron-icon hidden='[[!item.mostrar]]' icon='vaadin:check' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-primary-text-color);'></iron-icon><iron-icon hidden='[[item.mostrar]]' icon='vaadin:minus' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: var(--lumo-disabled-text-color);'></iron-icon>")
                 .withProperty("mostrar", Contabletipificacion::isMostrar);
@@ -99,8 +98,8 @@ public class TiposdeCuentaView extends Div implements BeforeEnterObserver {
         binder = new BeanValidationBinder<>(Contabletipificacion.class);
 
         // Bind fields. This where you'd define e.g. validation rules
-        binder.forField(idtipocuenta).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
-                .bind("idtipocuenta");
+        //binder.forField(id).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
+        //        .bind("idtipocuenta");
 
         binder.bindInstanceFields(this);
 
@@ -157,13 +156,13 @@ public class TiposdeCuentaView extends Div implements BeforeEnterObserver {
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        idtipocuenta = new TextField("Idtipocuenta");
+        //idtipocuenta = new TextField("Idtipocuenta");
         tipo = new TextField("Tipo");
         mostrar = new Checkbox("Mostrar");
         mostrar.getStyle().set("padding-top", "var(--lumo-space-m)");
         estotal = new Checkbox("Estotal");
         estotal.getStyle().set("padding-top", "var(--lumo-space-m)");
-        Component[] fields = new Component[]{idtipocuenta, tipo, mostrar, estotal};
+        Component[] fields = new Component[]{ tipo, mostrar, estotal};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");

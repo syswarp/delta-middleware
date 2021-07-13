@@ -1,8 +1,13 @@
 package com.syswarp.delta.views.plandecuentascontables;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.syswarp.delta.data.entity.Contablecencosto;
+import com.syswarp.delta.data.entity.Contableejercicios;
 import com.syswarp.delta.data.entity.Contableinfiplan;
+import com.syswarp.delta.data.service.ContablecencostoRepository;
+import com.syswarp.delta.data.service.ContableejerciciosRepository;
 import com.syswarp.delta.data.service.ContableinfiplanService;
 
 import com.vaadin.flow.component.Component;
@@ -10,6 +15,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -38,19 +44,24 @@ import com.vaadin.flow.data.converter.StringToIntegerConverter;
 @PageTitle("Plan de Cuentas Contables")
 public class PlandeCuentasContablesView extends Div implements BeforeEnterObserver {
 
+    @Autowired
+    ContablecencostoRepository cc;
+
     private final String CONTABLEINFIPLAN_ID = "contableinfiplanID";
     private final String CONTABLEINFIPLAN_EDIT_ROUTE_TEMPLATE = "plan-cuentas-contablesl/%d/edit";
 
     private Grid<Contableinfiplan> grid = new Grid<>(Contableinfiplan.class, false);
+    ComboBox<Contablecencosto> cc1;
+    ComboBox<Contablecencosto> cc2;
 
-    private TextField idejercicio;
+
     private TextField idcuenta;
     private TextField cuenta;
     private Checkbox imputable;
     private Checkbox ajustable;
     private Checkbox resultado;
     private TextField nivel;
-    private TextField idcentrocosto1;
+    //private TextField idcentrocosto1;
     private TextField idcentrocosto2;
     private TextField usuarioalt;
     private TextField usuarioact;
@@ -79,7 +90,7 @@ public class PlandeCuentasContablesView extends Div implements BeforeEnterObserv
         add(splitLayout);
 
         // Configure Grid
-        grid.addColumn("idejercicio").setAutoWidth(true);
+
         grid.addColumn("idcuenta").setAutoWidth(true);
         grid.addColumn("cuenta").setAutoWidth(true);
         TemplateRenderer<Contableinfiplan> imputableRenderer = TemplateRenderer.<Contableinfiplan>of(
@@ -98,8 +109,8 @@ public class PlandeCuentasContablesView extends Div implements BeforeEnterObserv
         grid.addColumn(resultadoRenderer).setHeader("Resultado").setAutoWidth(true);
 
         grid.addColumn("nivel").setAutoWidth(true);
-        grid.addColumn("idcentrocosto1").setAutoWidth(true);
-        grid.addColumn("idcentrocosto2").setAutoWidth(true);
+       // grid.addColumn("idcentrocosto1").setAutoWidth(true);
+       //grid.addColumn("idcentrocosto2").setAutoWidth(true);
         grid.addColumn("usuarioalt").setAutoWidth(true);
         grid.addColumn("usuarioact").setAutoWidth(true);
         grid.addColumn("fechaalt").setAutoWidth(true);
@@ -111,7 +122,7 @@ public class PlandeCuentasContablesView extends Div implements BeforeEnterObserv
         // when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> {
             if (event.getValue() != null) {
-                UI.getCurrent().navigate(String.format(CONTABLEINFIPLAN_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
+               // UI.getCurrent().navigate(String.format(CONTABLEINFIPLAN_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
             } else {
                 clearForm();
                 UI.getCurrent().navigate(PlandeCuentasContablesView.class);
@@ -122,15 +133,14 @@ public class PlandeCuentasContablesView extends Div implements BeforeEnterObserv
         binder = new BeanValidationBinder<>(Contableinfiplan.class);
 
         // Bind fields. This where you'd define e.g. validation rules
-        binder.forField(idejercicio).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
-                .bind("idejercicio");
+        //binder.forField(idejercicio).withConverter(new StringToIntegerConverter("Only numbers are allowed")).bind("idejercicio");
         binder.forField(idcuenta).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
                 .bind("idcuenta");
         binder.forField(nivel).withConverter(new StringToIntegerConverter("Only numbers are allowed")).bind("nivel");
-        binder.forField(idcentrocosto1).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
-                .bind("idcentrocosto1");
-        binder.forField(idcentrocosto2).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
-                .bind("idcentrocosto2");
+      //  binder.forField(idcentrocosto1).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
+      //          .bind("idcentrocosto1");
+       // binder.forField(idcentrocosto2).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
+       //         .bind("idcentrocosto2");
 
         binder.bindInstanceFields(this);
 
@@ -187,7 +197,6 @@ public class PlandeCuentasContablesView extends Div implements BeforeEnterObserv
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        idejercicio = new TextField("Idejercicio");
         idcuenta = new TextField("Idcuenta");
         cuenta = new TextField("Cuenta");
         imputable = new Checkbox("Imputable");
@@ -197,16 +206,20 @@ public class PlandeCuentasContablesView extends Div implements BeforeEnterObserv
         resultado = new Checkbox("Resultado");
         resultado.getStyle().set("padding-top", "var(--lumo-space-m)");
         nivel = new TextField("Nivel");
-        idcentrocosto1 = new TextField("Idcentrocosto1");
-        idcentrocosto2 = new TextField("Idcentrocosto2");
+        //idcentrocosto1 = new TextField("Idcentrocosto1");
+        cc1 = new ComboBox<Contablecencosto>("Centro de Costo 1");
+        cc2 = new ComboBox<Contablecencosto>("Centro de Costo 2");
+
+
+       // idcentrocosto2 = new TextField("Idcentrocosto2");
         usuarioalt = new TextField("Usuarioalt");
         usuarioact = new TextField("Usuarioact");
         fechaalt = new DateTimePicker("Fechaalt");
         fechaalt.setStep(Duration.ofSeconds(1));
         fechaact = new DateTimePicker("Fechaact");
         fechaact.setStep(Duration.ofSeconds(1));
-        Component[] fields = new Component[]{idejercicio, idcuenta, cuenta, imputable, ajustable, resultado, nivel,
-                idcentrocosto1, idcentrocosto2, usuarioalt, usuarioact, fechaalt, fechaact};
+        Component[] fields = new Component[]{ idcuenta, cuenta, imputable, ajustable, resultado, nivel,
+                cc1, cc2,  usuarioalt, usuarioact, fechaalt, fechaact};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");
@@ -247,7 +260,18 @@ public class PlandeCuentasContablesView extends Div implements BeforeEnterObserv
 
     private void populateForm(Contableinfiplan value) {
         this.contableinfiplan = value;
-        binder.readBean(this.contableinfiplan);
+
+     //Centros de Costo1
+     List<Contablecencosto> cc1List = cc.findAll();
+     cc1.setItems(cc1List);
+     cc1.setItemLabelGenerator(Contablecencosto::getDescripcion);
+
+     //Centros de Costo2
+     List<Contablecencosto> cc2List = cc.findAll();
+     cc2.setItems(cc2List);
+     cc2.setItemLabelGenerator(Contablecencosto::getDescripcion);
+
+     binder.readBean(this.contableinfiplan);
 
     }
 }

@@ -1,23 +1,19 @@
 package com.syswarp.delta.data.generator;
 
+import com.syswarp.delta.data.entity.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 
 import com.syswarp.delta.data.service.ContableejerciciosRepository;
-import com.syswarp.delta.data.entity.Contableejercicios;
 import com.syswarp.delta.data.service.ContablecencostoRepository;
-import com.syswarp.delta.data.entity.Contablecencosto;
 import com.syswarp.delta.data.service.ContableasientosRepository;
-import com.syswarp.delta.data.entity.Contableasientos;
 import com.syswarp.delta.data.service.ContableinfiplanRepository;
-import com.syswarp.delta.data.entity.Contableinfiplan;
 import com.syswarp.delta.data.service.ContabletipificacionRepository;
-import com.syswarp.delta.data.entity.Contabletipificacion;
 import com.syswarp.delta.data.service.ContableinfimovRepository;
-import com.syswarp.delta.data.entity.Contableinfimov;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,87 +40,105 @@ public class DataGenerator {
             }
             int seed = 123;
 
-            logger.info("Generating demo data");
+            logger.info("Generando datos iniciales");
 
             logger.info("... generarando ejercicios contables...");
 
 
-            Contableejercicios ce = new Contableejercicios();
-            //2019
-            ce.setId(1);
-            ce.setEjercicio("2019- Ejercicio Contable Enero 2019 a Diciembre 2019");
-            ce.setActivo(false);
-            ce.setUsuarioalt("syswarp");
-            ce.setUsuarioact("syswarp");
             LocalDateTime hoy = LocalDateTime.now();
-            ce.setFechaalt(hoy);
-            ce.setFechaact(hoy);
-            LocalDate desde = LocalDate.of(2019, Month.JANUARY, 1);
-            LocalDate hasta = LocalDate.of(2019, Month.DECEMBER, 31);
-            ce.setFechadesde(desde);
-            ce.setFechahasta(hasta);
-            contableejerciciosRepository.save(ce);
+            int aniodesde = hoy.getYear() - 11;
+            int aniohasta = hoy.getYear();
 
-            //2020
-            ce.setId(2);
-            ce.setEjercicio("2020- Ejercicio Contable Enero 2020 a Diciembre 2020");
-            ce.setActivo(false);
-            ce.setUsuarioalt("syswarp");
-            ce.setUsuarioact("syswarp");
-             hoy = LocalDateTime.now();
-            ce.setFechaalt(hoy);
-            ce.setFechaact(hoy);
-             desde = LocalDate.of(2020, Month.JANUARY, 1);
-             hasta = LocalDate.of(2020, Month.DECEMBER, 31);
-            ce.setFechadesde(desde);
-            ce.setFechahasta(hasta);
-            contableejerciciosRepository.save(ce);
 
-            //2021
-            ce.setId(3);
-            ce.setEjercicio("2021- Ejercicio Contable Enero 2021 a Diciembre 2021");
-            ce.setActivo(true);
-            ce.setUsuarioalt("syswarp");
-            ce.setUsuarioact("syswarp");
-            hoy = LocalDateTime.now();
-            ce.setFechaalt(hoy);
-            ce.setFechaact(hoy);
-            desde = LocalDate.of(2021, Month.JANUARY, 1);
-            hasta = LocalDate.of(2021, Month.DECEMBER, 31);
-            ce.setFechadesde(desde);
-            ce.setFechahasta(hasta);
-            contableejerciciosRepository.save(ce);
+            while(aniodesde<=aniohasta){
+                Contableejercicios ce = new Contableejercicios();
 
+                //ce.setId(1);
+                ce.setEjercicio( aniodesde+ " - Ejercicio Contable Enero "+aniodesde+" a Diciembre "+aniodesde);
+                ce.setActivo(false);
+                ce.setUsuarioalt("syswarp");
+                ce.setUsuarioact("syswarp");
+                ce.setFechaalt(hoy);
+                ce.setFechaact(hoy);
+                LocalDate desde = LocalDate.of(aniodesde, Month.JANUARY, 1);
+                LocalDate hasta = LocalDate.of(aniodesde, Month.DECEMBER, 31);
+                ce.setFechadesde(desde);
+                ce.setFechahasta(hasta);
+                if(aniodesde==aniohasta) ce.setActivo(true); //else ce.setActivo(false);
+
+
+                contableejerciciosRepository.save(ce);
+                ++aniodesde;
+            }
+            logger.info("... generando centros de costos...");
+
+
+            for (int i = 1; i<100;i++){
+                Contablecencosto cc = new Contablecencosto();
+                cc.setDescripcion("Centro de Costo Numero: "+i);
+                cc.setUsuarioalt("syswarp");
+                cc.setUsuarioact("syswarp");
+                cc.setFechaalt(hoy);
+                cc.setFechaact(hoy);
+                contablecencostoRepository.save(cc);
+            }
+
+            logger.info("... generando tipos de cuenta contable...");
+
+            Contabletipificacion ct = new Contabletipificacion();
+            ct.setTipo("Cuentas De Resultado");
+            ct.setEstotal(true);
+            ct.setUsuarioalt("syswarp");
+            ct.setUsuarioact("syswarp");
+            ct.setFechaalt(hoy);
+            ct.setFechaact(hoy);
+            contabletipificacionRepository.save(ct);
+
+            ct = new Contabletipificacion();
+            ct.setTipo("Cuentas De Orden");
+            ct.setEstotal(true);
+            ct.setUsuarioalt("syswarp");
+            ct.setUsuarioact("syswarp");
+            ct.setFechaalt(hoy);
+            ct.setFechaact(hoy);
+            contabletipificacionRepository.save(ct);
+
+            ct = new Contabletipificacion();
+            ct.setTipo("Cuentas De Ajuste");
+            ct.setEstotal(true);
+            ct.setUsuarioalt("syswarp");
+            ct.setUsuarioact("syswarp");
+            ct.setFechaalt(hoy);
+            ct.setFechaact(hoy);
+            contabletipificacionRepository.save(ct);
+
+
+            logger.info("... generando cuentas contables...");
+
+
+            Contableinfiplan pc = new Contableinfiplan();
+            Contablecencosto cc = contablecencostoRepository.getOne(100);
+            //pc.setIdejercicio(1);
+            pc.setIdcuenta(10000);
+            pc.setCuenta("ACTIVO");
+            pc.setNivel(1);
+            pc.setCc1(cc);
+            pc.setCc1(cc);
+            pc.setAjustable(false);
+            pc.setImputable(false);
+            pc.setResultado(false);
+            pc.setUsuarioalt("syswarp");
+            pc.setUsuarioact("syswarp");
+            pc.setFechaalt(hoy);
+            pc.setFechaact(hoy);
+
+
+            contableinfiplanRepository.save(pc);
+
+
+
+            logger.info("... generando asientos contables...");
             /*
-            ExampleDataGenerator<Contableejercicios> contableejerciciosRepositoryGenerator = new ExampleDataGenerator<>(
-                    Contableejercicios.class, LocalDateTime.of(2021, 6, 24, 0, 0, 0));
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setId, DataType.ID);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setId, DataType.NUMBER_UP_TO_10);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setEjercicio, DataType.WORD);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setFechadesde, DataType.DATE_OF_BIRTH);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setFechahasta, DataType.DATE_OF_BIRTH);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setActivo, DataType.BOOLEAN_50_50);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setUsuarioalt, DataType.WORD);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setUsuarioact, DataType.WORD);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setFechaalt,
-                    DataType.DATETIME_LAST_10_YEARS);
-            contableejerciciosRepositoryGenerator.setData(Contableejercicios::setFechaact,
-                    DataType.DATETIME_LAST_10_YEARS);
-            contableejerciciosRepository.saveAll(contableejerciciosRepositoryGenerator.create(100, seed));
-            */
-            logger.info("... generating 100 Contablecencosto entities...");
-            ExampleDataGenerator<Contablecencosto> contablecencostoRepositoryGenerator = new ExampleDataGenerator<>(
-                    Contablecencosto.class, LocalDateTime.of(2021, 6, 24, 0, 0, 0));
-            contablecencostoRepositoryGenerator.setData(Contablecencosto::setId, DataType.ID);
-            contablecencostoRepositoryGenerator.setData(Contablecencosto::setIdcencosto, DataType.NUMBER_UP_TO_100);
-            contablecencostoRepositoryGenerator.setData(Contablecencosto::setDescripcion, DataType.WORD);
-            contablecencostoRepositoryGenerator.setData(Contablecencosto::setUsuarioalt, DataType.WORD);
-            contablecencostoRepositoryGenerator.setData(Contablecencosto::setUsuarioact, DataType.WORD);
-            contablecencostoRepositoryGenerator.setData(Contablecencosto::setFechaalt, DataType.DATETIME_LAST_10_YEARS);
-            contablecencostoRepositoryGenerator.setData(Contablecencosto::setFechaact, DataType.DATETIME_LAST_10_YEARS);
-            contablecencostoRepository.saveAll(contablecencostoRepositoryGenerator.create(100, seed));
-
-            logger.info("... generating 100 Contableasientos entities...");
             ExampleDataGenerator<Contableasientos> contableasientosRepositoryGenerator = new ExampleDataGenerator<>(
                     Contableasientos.class, LocalDateTime.of(2021, 6, 24, 0, 0, 0));
             contableasientosRepositoryGenerator.setData(Contableasientos::setId, DataType.ID);
@@ -141,8 +155,8 @@ public class DataGenerator {
             contableasientosRepositoryGenerator.setData(Contableasientos::setFechaalt, DataType.DATE_OF_BIRTH);
             contableasientosRepositoryGenerator.setData(Contableasientos::setFechaact, DataType.DATE_OF_BIRTH);
             contableasientosRepository.saveAll(contableasientosRepositoryGenerator.create(100, seed));
-
-            logger.info("... generating 100 Contableinfiplan entities...");
+            */
+            /*
             ExampleDataGenerator<Contableinfiplan> contableinfiplanRepositoryGenerator = new ExampleDataGenerator<>(
                     Contableinfiplan.class, LocalDateTime.of(2021, 6, 24, 0, 0, 0));
             contableinfiplanRepositoryGenerator.setData(Contableinfiplan::setId, DataType.ID);
@@ -160,17 +174,8 @@ public class DataGenerator {
             contableinfiplanRepositoryGenerator.setData(Contableinfiplan::setFechaalt, DataType.DATETIME_LAST_10_YEARS);
             contableinfiplanRepositoryGenerator.setData(Contableinfiplan::setFechaact, DataType.DATETIME_LAST_10_YEARS);
             contableinfiplanRepository.saveAll(contableinfiplanRepositoryGenerator.create(100, seed));
+            */
 
-            logger.info("... generating 100 Contabletipificacion entities...");
-            ExampleDataGenerator<Contabletipificacion> contabletipificacionRepositoryGenerator = new ExampleDataGenerator<>(
-                    Contabletipificacion.class, LocalDateTime.of(2021, 6, 24, 0, 0, 0));
-            contabletipificacionRepositoryGenerator.setData(Contabletipificacion::setId, DataType.ID);
-            contabletipificacionRepositoryGenerator.setData(Contabletipificacion::setIdtipocuenta,
-                    DataType.NUMBER_UP_TO_100);
-            contabletipificacionRepositoryGenerator.setData(Contabletipificacion::setTipo, DataType.WORD);
-            contabletipificacionRepositoryGenerator.setData(Contabletipificacion::setMostrar, DataType.BOOLEAN_50_50);
-            contabletipificacionRepositoryGenerator.setData(Contabletipificacion::setEstotal, DataType.BOOLEAN_50_50);
-            contabletipificacionRepository.saveAll(contabletipificacionRepositoryGenerator.create(100, seed));
 
             logger.info("... generating 100 Contableinfimov entities...");
             ExampleDataGenerator<Contableinfimov> contableinfimovRepositoryGenerator = new ExampleDataGenerator<>(

@@ -1,40 +1,59 @@
 package com.syswarp.delta.data.entity;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import com.syswarp.delta.data.AbstractEntity;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 
 @Entity
-public class Contableinfiplan extends AbstractEntity {
+@Table(name="Contableinfiplan")
 
-    private Integer idejercicio;
-    private Integer idcuenta;
+
+public class Contableinfiplan implements Serializable {
+// id compuesto!
+
+    @Id
+    @Column
+    private long idcuenta;
+
+
+// relaciones
+   @ManyToOne
+   @JoinColumn(name="idcentrocosto1")
+   private Contablecencosto cc1;
+
+
+    @ManyToOne
+    @JoinColumn(name="idcentrocosto2")
+    private Contablecencosto cc2;
+
+
+
+
     private String cuenta;
     private boolean imputable;
     private boolean ajustable;
     private boolean resultado;
     private Integer nivel;
-    private Integer idcentrocosto1;
-    private Integer idcentrocosto2;
+   // private Integer idcentrocosto1;
+   // private Integer idcentrocosto2;
     private String usuarioalt;
     private String usuarioact;
     private LocalDateTime fechaalt;
     private LocalDateTime fechaact;
 
-    public Integer getIdejercicio() {
-        return idejercicio;
-    }
-    public void setIdejercicio(Integer idejercicio) {
-        this.idejercicio = idejercicio;
-    }
-    public Integer getIdcuenta() {
+    public long getIdcuenta() {
         return idcuenta;
     }
-    public void setIdcuenta(Integer idcuenta) {
+
+    public void setIdcuenta(long idcuenta) {
         this.idcuenta = idcuenta;
     }
+
+
     public String getCuenta() {
         return cuenta;
     }
@@ -65,18 +84,6 @@ public class Contableinfiplan extends AbstractEntity {
     public void setNivel(Integer nivel) {
         this.nivel = nivel;
     }
-    public Integer getIdcentrocosto1() {
-        return idcentrocosto1;
-    }
-    public void setIdcentrocosto1(Integer idcentrocosto1) {
-        this.idcentrocosto1 = idcentrocosto1;
-    }
-    public Integer getIdcentrocosto2() {
-        return idcentrocosto2;
-    }
-    public void setIdcentrocosto2(Integer idcentrocosto2) {
-        this.idcentrocosto2 = idcentrocosto2;
-    }
     public String getUsuarioalt() {
         return usuarioalt;
     }
@@ -101,5 +108,25 @@ public class Contableinfiplan extends AbstractEntity {
     public void setFechaact(LocalDateTime fechaact) {
         this.fechaact = fechaact;
     }
+
+    ///////
+
+
+    public Contablecencosto getCc1() {
+        return cc1;
+    }
+
+    public void setCc1(Contablecencosto cc1) {
+        this.cc1 = cc1;
+    }
+
+    public Contablecencosto getCc2() {
+        return cc2;
+    }
+
+    public void setCc2(Contablecencosto cc2) {
+        this.cc2 = cc2;
+    }
+
 
 }

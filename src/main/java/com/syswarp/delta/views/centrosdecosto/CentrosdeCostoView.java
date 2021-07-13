@@ -41,7 +41,7 @@ public class CentrosdeCostoView extends Div implements BeforeEnterObserver {
 
     private Grid<Contablecencosto> grid = new Grid<>(Contablecencosto.class, false);
 
-    private TextField idcencosto;
+    //private TextField idcencosto;
     private TextField descripcion;
     private TextField usuarioalt;
     private TextField usuarioact;
@@ -70,12 +70,8 @@ public class CentrosdeCostoView extends Div implements BeforeEnterObserver {
         add(splitLayout);
 
         // Configure Grid
-        grid.addColumn("idcencosto").setAutoWidth(true);
-        grid.addColumn("descripcion").setAutoWidth(true);
-        grid.addColumn("usuarioalt").setAutoWidth(true);
-        grid.addColumn("usuarioact").setAutoWidth(true);
-        grid.addColumn("fechaalt").setAutoWidth(true);
-        grid.addColumn("fechaact").setAutoWidth(true);
+        grid.addColumn("id").setAutoWidth(true);
+        grid.addColumn("descripcion").setAutoWidth(true).setHeader("Centro de Costo");
         grid.setDataProvider(new CrudServiceDataProvider<>(contablecencostoService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
@@ -94,8 +90,8 @@ public class CentrosdeCostoView extends Div implements BeforeEnterObserver {
         binder = new BeanValidationBinder<>(Contablecencosto.class);
 
         // Bind fields. This where you'd define e.g. validation rules
-        binder.forField(idcencosto).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
-                .bind("idcencosto");
+        //binder.forField(id).withConverter(new StringToIntegerConverter("Only numbers are allowed"))
+         //       .bind("idcencosto");
 
         binder.bindInstanceFields(this);
 
@@ -152,15 +148,15 @@ public class CentrosdeCostoView extends Div implements BeforeEnterObserver {
         editorLayoutDiv.add(editorDiv);
 
         FormLayout formLayout = new FormLayout();
-        idcencosto = new TextField("Idcencosto");
+       //idcencosto = new TextField("Idcencosto");
         descripcion = new TextField("Descripcion");
-        usuarioalt = new TextField("Usuarioalt");
-        usuarioact = new TextField("Usuarioact");
-        fechaalt = new DateTimePicker("Fechaalt");
-        fechaalt.setStep(Duration.ofSeconds(1));
-        fechaact = new DateTimePicker("Fechaact");
-        fechaact.setStep(Duration.ofSeconds(1));
-        Component[] fields = new Component[]{idcencosto, descripcion, usuarioalt, usuarioact, fechaalt, fechaact};
+      //  usuarioalt = new TextField("Usuarioalt");
+       // usuarioact = new TextField("Usuarioact");
+       // fechaalt = new DateTimePicker("Fechaalt");
+       // fechaalt.setStep(Duration.ofSeconds(1));
+       // fechaact = new DateTimePicker("Fechaact");
+       // fechaact.setStep(Duration.ofSeconds(1));
+        Component[] fields = new Component[]{ descripcion};
 
         for (Component field : fields) {
             ((HasStyle) field).addClassName("full-width");
